@@ -1,0 +1,11 @@
+SELECT 
+    d.Nome AS Departamento,
+    p.Nome AS Pessoa,
+    p.Salario
+FROM Pessoa p
+INNER JOIN Departamento d ON p.DeptId = d.Id
+WHERE p.Salario = (
+    SELECT MAX(Salario)
+    FROM Pessoa p2
+    WHERE p2.DeptId = p.DeptId
+);
