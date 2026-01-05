@@ -1,3 +1,5 @@
+Tarefa - 1
+
 SELECT 
     d.Nome AS Departamento,
     p.Nome AS Pessoa,
@@ -9,3 +11,78 @@ WHERE p.Salario = (
     FROM Pessoa p2
     WHERE p2.DeptId = p.DeptId
 );
+
+Tarefa - 2
+using System;
+
+class Node
+{
+    public int valor;
+    public Node esquerda;
+    public Node direita;
+
+    public Node(int v)
+    {
+        valor = v;
+    }
+}
+
+class Program
+{    
+    static Node MontaArvore(int[] arr, int ini, int fim)
+    {
+        if (ini > fim) return null;
+       
+        int maiorIdx = ini;
+        for (int i = ini + 1; i <= fim; i++)
+        {
+            if (arr[i] > arr[maiorIdx])
+                maiorIdx = i;
+        }
+        
+        Node raiz = new Node(arr[maiorIdx]);
+       
+        raiz.esquerda = MontaArvore(arr, ini, maiorIdx - 1);
+        raiz.direita = MontaArvore(arr, maiorIdx + 1, fim);
+
+        return raiz;
+    }
+    
+    static Node ConstroiArvore(int[] arr)
+    {
+        if (arr == null || arr.Length == 0) return null;
+        return MontaArvore(arr, 0, arr.Length - 1);
+    }
+    
+    static void ImprimeArvore(Node no, string prefixo = "", bool ultimo = true)
+    {
+        if (no == null) return;
+
+        Console.WriteLine(prefixo + (ultimo ? "└─ " : "├─ ") + no.valor);
+
+        string novoPrefixo = prefixo + (ultimo ? "   " : "│  ");
+        
+        if (no.esquerda != null || no.direita != null)
+        {
+            if (no.esquerda != null)
+                ImprimeArvore(no.esquerda, novoPrefixo, no.direita == null);
+            if (no.direita != null)
+                ImprimeArvore(no.direita, novoPrefixo, true);
+        }
+    }
+
+    // Teste com os dois cenários do enunciado
+    static void Main()
+    {
+        // Cenário 1
+        Console.WriteLine("Cenário 1:");
+        int[] arr1 = { 3, 2, 1, 6, 0, 5 };
+        Node arvore1 = ConstroiArvore(arr1);
+        ImprimeArvore(arvore1);
+
+        Console.WriteLine("\nCenário 2:");
+        int[] arr2 = { 7, 5, 13, 9, 1, 6, 4 };
+        Node arvore2 = ConstroiArvore(arr2);
+        ImprimeArvore(arvore2);
+    }
+}
